@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tax Optimization Form</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        form {
+            max-width: 500px;
+            margin: auto;
+        }
+        label {
+            font-weight: bold;
+        }
+        input, select, button {
+            display: block;
+            width: 100%;
+            margin: 8px 0;
+            padding: 8px;
+        }
+        button {
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .optional-field {
+            display: none;
+            margin-top: 8px;
+        }
+        .tooltip {
+            position: relative;
+            cursor: help;
+            border-bottom: 1px dotted black;
+        }
+        .tooltip:hover::after {
+            content: attr(data-tooltip);
+            position: absolute;
+            left: 0;
+            top: 100%;
+            background-color: #333;
+            color: white;
+            padding: 5px;
+            border-radius: 5px;
+            font-size: 0.9em;
+            white-space: nowrap;
+            z-index: 10;
+        }
+        /* Custom checkbox styling */
+        .custom-checkbox {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+            cursor: pointer;
+        }
+        .custom-checkbox input[type="checkbox"] {
+            display: none;
+        }
+        .custom-checkbox span {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            margin-right: 10px;
+            border: 2px solid #007BFF;
+            border-radius: 4px;
+            background-color: white;
+            transition: background-color 0.3s, border-color 0.3s;
+        }
+        .custom-checkbox input[type="checkbox"]:checked + span {
+            background-color: #007BFF;
+            border-color: #0056b3;
+        }
+        .custom-checkbox label {
+            cursor: pointer;
+        }
+    </style>
+    <script>
+        function toggleOptionalField(checkbox, fieldId) {
+            const field = document.getElementById(fieldId);
+
+            if (checkbox.checked) {
+                field.style.display = "block";
+            } else {
+                field.style.display = "none";
+                const inputField = field.querySelector("input");
+                if (inputField) {
+                    inputField.value = ""; // Clear the value when hidden
+                }
+            }
+        }
+    </script>
+</head>
+<body>
+    <h1>Tax Optimization Form</h1>
+    <form action="/optimize-tax" method="POST">
+        <label for="income" class="tooltip" data-tooltip="Your total annual income before deductions.">
+            Annual Income (₹):
+        </label>
+        <input type="number" id="income" name="income" required><br><br>
+
+        <label for="basic_salary" class="tooltip" data-tooltip="The basic component of your salary.">
+            Basic Salary (₹):
+        </label>
+        <input type="number" id="basic_salary" name="basic_salary" required><br><br>
+
+        <!-- Rent Paid Section -->
+        <div class="custom-checkbox">
+            <input type="checkbox" id="rent_checkbox" name="rent_option" onclick="toggleOptionalField(this, 'hra_rent_section')">
+            <span></span>
+            <label for="rent_checkbox">Optimize with Rent Paid</label>
+        </div>
+        <div id="hra_rent_section" class="optional-field">
+            <label for="hra_rent_paid" class="tooltip" data-tooltip="Total rent paid during the year.">
+                Rent Paid (₹):
+            </label>
+            <input type="number" id="hra_rent_paid" name="hra_rent_paid"><br><br>
+        </div>
+
+        <!-- Health Insurance Section -->
+        <div class="custom-checkbox">
+            <input type="checkbox" id="insurance_checkbox" name="insurance_option" onclick="toggleOptionalField(this, 'insurance_section')">
+            <span></span>
+            <label for="insurance_checkbox">Optimize with Health Insurance</label>
+        </div>
+        <div id="insurance_section" class="optional-field">
+            <label for="health_insurance_premium" class="tooltip" data-tooltip="Premium paid for health insurance.">
+                Health Insurance Premium (₹):
+            </label>
+            <input type="number" id="health_insurance_premium" name="health_insurance_premium"><br><br>
+        </div>
+
+        <!-- Education Loan Section -->
+        <div class="custom-checkbox">
+            <input type="checkbox" id="education_checkbox" name="education_option" onclick="toggleOptionalField(this, 'education_section')">
+            <span></span>
+            <label for="education_checkbox">Optimize with Education Loan Interest</label>
+        </div>
+        <div id="education_section" class="optional-field">
+            <label for="education_loan_interest" class="tooltip" data-tooltip="Interest paid on education loan.">
+                Education Loan Interest (₹):
+            </label>
+            <input type="number" id="education_loan_interest" name="education_loan_interest"><br><br>
+        </div>
+
+        <!-- Investments Section -->
+        <div class="custom-checkbox">
+            <input type="checkbox" id="investment_checkbox" name="investment_option" onclick="toggleOptionalField(this, 'investment_section')">
+            <span></span>
+            <label for="investment_checkbox">Are you ready to invest?</label>
+        </div>
+        <div id="investment_section" class="optional-field">
+            <label for="investments_80C" class="tooltip" data-tooltip="Investments under Section 80C (e.g., PPF, LIC).">
+                Investment Amount (₹):
+            </label>
+            <input type="number" id="investments_80C" name="investments_80C"><br><br>
+        </div>
+
+        <!-- Home Loan Interest Section -->
+        <div class="custom-checkbox">
+            <input type="checkbox" id="home_loan_checkbox" name="home_loan_option" onclick="toggleOptionalField(this, 'home_loan_section')">
+            <span></span>
+            <label for="home_loan_checkbox">Optimize with Home Loan Interest</label>
+        </div>
+        <div id="home_loan_section" class="optional-field">
+            <label for="home_loan_interest" class="tooltip" data-tooltip="Interest paid on a home loan.">
+                Home Loan Interest (₹):
+            </label>
+            <input type="number" id="home_loan_interest" name="home_loan_interest"><br><br>
+        </div>
+
+        <button type="submit">Optimize Tax</button>
+    </form>
+</body>
+</html>
