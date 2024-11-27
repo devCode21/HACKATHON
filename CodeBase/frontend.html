@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tax Optimization</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f9;
+            color: #333;
+        }
+        .container {
+            width: 80%;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+            color: #4CAF50;
+        }
+        form {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        label {
+            font-weight: bold;
+        }
+        input[type="number"] {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        #result {
+            margin-top: 20px;
+        }
+        #result h2 {
+            color: #4CAF50;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>Tax Optimization Tool</h1>
+    <form onsubmit="calculateTax(event)">
+        <label for="annual_income">Annual Income (₹):</label>
+        <input type="number" id="annual_income" required><br>
+
+        <label for="basic_salary">Basic Salary (₹):</label>
+        <input type="number" id="basic_salary" required><br>
+
+        <label for="hra_rent_paid">HRA / Rent Paid (₹):</label>
+        <input type="number" id="hra_rent_paid" required><br>
+
+        <label for="health_insurance_premium">Health Insurance Premium (₹):</label>
+        <input type="number" id="health_insurance_premium" required><br>
+
+        <label for="education_loan_interest">Education Loan Interest (₹):</label>
+        <input type="number" id="education_loan_interest" required><br>
+
+        <label for="investments_80c">80C Investments (₹):</label>
+        <input type="number" id="investments_80c" required><br>
+
+        <label for="home_loan_interest">Home Loan Interest (₹):</label>
+        <input type="number" id="home_loan_interest" required><br>
+
+        <button type="submit">Optimize Tax</button>
+    </form>
+
+    <div id="result"></div>
+</div>
+
+<script>
+    async function calculateTax(event) {
+        event.preventDefault(); // Prevent form from refreshing the page
+
+        // Get form values
+        const annual_income = parseFloat(document.getElementById("annual_income").value) || 0;
+        const basic_salary = parseFloat(document.getElementById("basic_salary").value) || 0;
+        const hra_rent_paid = parseFloat(document.getElementById("hra_rent_paid").value) || 0;
+        const health_insurance_premium = parseFloat(document.getElementById("health_insurance_premium").value) || 0;
+        const education_loan_interest = parseFloat(document.getElementById("education_loan_interest").value) || 0;
+        const investments_80c = parseFloat(document.getElementById("investments_80c").value) || 0;
+        const home_loan_interest = parseFloat(document.getElementById("home_loan_interest").value) || 0;
+
+        const data = {
+            annual_income,
+            basic_salary,
+            hra_rent_paid,
+            health_insurance_premium,
+            education_loan_interest,
+            investments_80c,
+            home_loan_interest,
+        };
+
+        try {
+            const response = await fetch("http://localhost:8000/optimize_tax", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(data),
+            });
+
+            const responseData = await response.json();
+            if (response.ok) {
+                document.getElementById("result").innerHTML = `
+                    <h2>Tax Optimization Results</h2>
+                    <p><strong>Annual Income:</strong> ₹${responseData.annual_income}</p>
+                    <p><strong>Total Deductions:</strong> ₹${responseData.total_deductions}</p>
+                    <p><strong>Taxable Income:</strong> ₹${responseData.taxable_income}</p>
+                    <p><strong>Estimated Tax:</strong> ₹${responseData.estimated_tax}</p>
+                    <h3>Deduction Details:</h3>
+                    <ul>
+                        ${
+                            responseData.deduction_details
+                                ? Object.entries(responseData.deduction_details)
+                                      .map(
+                                          ([key, value]) =>
+                                              `<li><strong>${key}:</strong> ₹${value}</li>`
+                                      )
+                                      .join("")
+                                : "<li>No deduction details available</li>"
+                        }
+                    </ul>
+                `;
+            } else {
+                document.getElementById("result").innerHTML = `<p>Error: Could not calculate tax.</p>`;
+            }
+        } catch (error) {
+            document.getElementById("result").innerHTML = `<p>Error: ${error.message}</p>`;
+        }
+    }
+</script>
+
+</body>
+</html>
