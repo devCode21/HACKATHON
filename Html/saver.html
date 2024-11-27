@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chart Toggle</title>
+  <link rel="stylesheet" href="saver.css">
+</head>
+<body>
+  <div class="expense">
+    <div class="saving">
+      <h1>Total Savings</h1>
+      <h1 id="Savings"></h1>
+    </div>
+    <div class="totalexp">
+      <h1>Total Expense</h1>
+      <h1 id="totalexp"></h1>
+      <p>*including savings</p>
+    </div>
+  </div>
+  <div class="main-container">
+    <!-- Top-right toggle button -->
+    <button id="toggle-btn" class="toggle-btn">ON</button>
+    
+    <!-- Chart Container -->
+    <div class="chart-container">
+      <canvas id="chart"></canvas>
+    </div>
+  </div>
+
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="saver.js"></script>
+</body>
+</html>
