@@ -1,23 +1,25 @@
 *{
   text-decoration: none;
+ 
 }
 
 body {
-    font-family: Arial, sans-serif;
-    margin: 0;
+    font-family: 'Times New Roman', Times, serif;
+    overflow-x: hidden;
     padding: 0;
     text-decoration: none;
    
 }
 
 header {
+  
    
     padding: 20px;
     display: flex;
     justify-content: space-between;
     align-items:   
- center;
- text-decoration: none;
+    center;
+    text-decoration: none;
  
 }
 
@@ -26,17 +28,44 @@ header {
 }
 
 nav ul {
+   color: white;
     list-style: none;
     display: flex;
     text-decoration: none
 }
 
 nav ul li {
+
     margin-right:10rem;
     font-size: 1.8rem;
     font-weight: 800;
      text-decoration:  none;
     text-decoration: none;
+}
+#f{
+   
+   height: 6rem;
+   width: 95%;
+   display: flex;
+   justify-content: center;
+   align-items: center
+   ;
+
+ 
+}
+.butt{
+ display: flex;
+ align-items: center;
+ justify-content: center;
+  color: white;
+  height: 67px;
+  width: 160px;
+  margin-left: 1rem;
+  margin-bottom:10px;
+  border-radius: 10px;
+  font-size: large;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  background-color: #007BFF;
 }
 
 .get-app-button {
@@ -49,7 +78,8 @@ nav ul li {
 }
 
 main {
-   margin-top: 2rem;
+ 
+  
     height: 25rem;
     display: flex;
     justify-content: space-between;
@@ -60,7 +90,7 @@ main {
 }
 
 .hero-section {
-    
+   
     text-align: center;
     height: 95%;
     width: 60%;
@@ -68,6 +98,7 @@ main {
 }
 
 .hero-section h1 {
+  margin-left: 2rem;
     font-size: 36px;
     margin-bottom: 20px;
 }
@@ -121,12 +152,6 @@ main {
 
 
 
-body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-  }
   
   .cards-section {
     display: grid;
@@ -234,3 +259,35 @@ body {
   .spend-image a {
     display: inline-block;
   }
+
+
+  /* ... other styles ... */
+
+footer {
+  background-color: #F2F2F2;
+  margin: 2rem;
+  padding: 20px;
+  height: 20rem;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  
+}
+.footer-container{
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+
+}
+
+.footer-container button{
+        height: 5rem;
+        width: 5rem;
+        margin-left: 1rem;
+        border-radius: 45%;
+        border:none
+        
+}
+

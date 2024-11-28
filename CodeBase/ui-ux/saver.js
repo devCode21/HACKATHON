@@ -16,8 +16,8 @@ document.addEventListener("DOMContentLoaded", () => {
         const data = await response.json();
         console.log(data);
          // Log fetched data to see the structure
-         Savings.innerText=(data.totalSum)*0.5;
-         totalexp.innerText=data.totalSum
+         Savings.innerText=(data.totalSum)*0.05;
+         totalexp.innerText=data.totalSum *1.05;
          
         return data; // Assuming the API returns { labels, data }
       } catch (error) {
@@ -27,7 +27,7 @@ document.addEventListener("DOMContentLoaded", () => {
           setTimeout(() => {
             resolve({
               labels: data.labels,
-              data:( data.sav)*0.5 // Mock savings data
+              data:( data.sav)*0.05 // Mock savings data
             });
           }, 1000);
         });
