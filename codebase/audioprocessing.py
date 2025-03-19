@@ -15,13 +15,17 @@ dataset = []
 for i in df['speech']:
     dataset.append(extract_features(i))
 
-
 dataset=np.asarray(dataset)
 
-df1 =pd.DataFrame(df['speech'])
-df1['']
+df['auido-processd']=dataset.tolist()
 
-print(dataset)
+print(df)
+
+df.to_csv("dat1.csv")
+df.to_excel('data.xlsx')
+
+
+
 
 
 
