@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Emotion Detection from Voice Message</title>
+</head>
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: 'Poppins', sans-serif;
+    }
+
+    body {
+        background: linear-gradient(120deg, #74ebd5, #acb6e5);
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 30px;
+        color: #2c3e50;
+        overflow-x: hidden;
+    }
+
+    h1 {
+        font-size: 2.8rem;
+        margin-bottom: 40px;
+        color: #fff;
+        text-align: center;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+        animation: fadeIn 1s ease-in-out;
+    }
+
+    h2 {
+        font-size: 2rem;
+        margin: 25px 0;
+        color: #34495e;
+        text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
+    }
+
+    #audio-player {
+        width: 100%;
+        max-width: 450px;
+        margin: 20px 0;
+        border-radius: 15px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        background: #fff;
+        padding: 10px;
+    }
+
+    #prediction-result {
+        font-size: 1.6rem;
+        font-weight: 600;
+        color: #8e44ad;
+        text-align: center;
+        padding: 20px;
+        background: rgba(255, 255, 255, 0.95);
+        border-radius: 15px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+        min-height: 60px;
+        animation: slideUp 0.5s ease-out;
+    }
+
+    /* File upload container styles */
+    .file-upload-container {
+        margin: 15px;
+        padding: 20px;
+        background: rgba(255, 255, 255, 0.95);
+        border-radius: 15px;
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    input[type="file"] {
+        padding: 10px;
+        font-size: 1.1rem;
+        cursor: pointer;
+    }
+
+    /* Animations */
+    @keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+    }
+
+    @keyframes slideUp {
+        from { transform: translateY(20px); opacity: 0; }
+        to { transform: translateY(0); opacity: 1; }
+    }
+
+    /* Responsive Design */
+    @media (max-width: 600px) {
+        h1 {
+            font-size: 2.2rem;
+        }
+
+        h2 {
+            font-size: 1.6rem;
+        }
+
+        #audio-player {
+            max-width: 100%;
+        }
+
+        #prediction-result {
+            font-size: 1.4rem;
+            padding: 15px;
+        }
+    }
+</style>
+<body>
+    <h1>Upload Audio for Emotion Detection</h1>
+    
+    <!-- File upload input -->
+    <div class="file-upload-container">
+        <input type="file" id="audio-upload" accept=".wav">
+        <p>Upload a .wav file to analyze</p>
+    </div>
+    
+    <h2>Uploaded Audio</h2>
+    <audio id="audio-player" controls></audio>
+    
+    <h2 id="prediction-result"></h2>
+
+    <script>
+        // Get DOM elements
+        const audioPlayer = document.getElementById('audio-player');
+        const predictionResult = document.getElementById('prediction-result');
+        const audioUpload = document.getElementById('audio-upload');
+
+        // Add event listener to file input
+        audioUpload.addEventListener('change', handleFileUpload);
+
+        async function handleFileUpload() {
+            const file = audioUpload.files[0];
+            
+            if (file) {
+                // Check if file is WAV
+                if (file.type === 'audio/wav' || file.name.endsWith('.wav')) {
+                    const audioUrl = URL.createObjectURL(file);
+                    audioPlayer.src = audioUrl;
+
+                    predictionResult.textContent = "Processing...";
+                    sendAudioToBackend(file);
+                } else {
+                    predictionResult.textContent = "Please upload a .wav file";
+                    audioUpload.value = ''; // Clear the input
+                }
+            }
+        }
+
+        async function sendAudioToBackend(audioFile) {
+            const formData = new FormData();
+            formData.append("audio", audioFile, "uploaded.wav");
+
+            try {
+                const response = await fetch("/predict", {
+                    method: "POST",
+                    body: formData
+                });
+                const result = await response.json();
+
+                if (result.predicted_label) {
+                    predictionResult.textContent = `Predicted Emotion: ${result.predicted_label}`;
+                } else {
+                    predictionResult.textContent = `Error: ${result.error}`;
+                }
+            } catch (error) {
+                console.error("Error sending audio:", error);
+                predictionResult.textContent = "Error processing the request.";
+            }
+        }
+    </script>
+</body>
+</html>
