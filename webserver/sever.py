@@ -16,38 +16,22 @@ def extract_features(audio_file):
         print(f"Loading audio file: {audio_file}")
         if not os.path.exists(audio_file):
             raise FileNotFoundError(f"Audio file {audio_file} does not exist.")
-
-        # Step 1: Load the audio file
         y, sr = librosa.load(audio_file, sr=16000)
         print(f"Audio loaded. Sample rate: {sr}, Audio shape: {y.shape}")
-
-        # Step 2: Trim the audio (remove silence at the beginning and end)
         y, _ = librosa.effects.trim(y)
         print(f"Audio trimmed. New shape: {y.shape}")
-
-        # Step 3: Normalize the audio
         y = librosa.util.normalize(y)
-
-        # Step 4: Extract MFCC features
         mfcc = librosa.feature.mfcc(y=y, sr=sr, n_mfcc=40)
         mfcc_mean = np.mean(mfcc, axis=1)
         print(f"MFCC extracted. Shape: {mfcc_mean.shape}")
-
-        # Step 5: Extract pitch (f0)
         f0, voiced_flag, voiced_probs = librosa.pyin(y, fmin=librosa.note_to_hz('C1'), fmax=librosa.note_to_hz('C8'))
         mean_pitch = np.mean(f0) if f0 is not None else 0
         print(f"Pitch extracted. Mean pitch: {mean_pitch}")
-
-        # Step 6: Extract RMS energy
         energy = librosa.feature.rms(y=y)
         mean_energy = np.mean(energy)
         print(f"RMS energy extracted. Mean energy: {mean_energy}")
-
-        # Step 7: Estimate speech rate
         speech_rate = np.sum(energy > 0.01)
         print(f"Speech rate estimated. Value: {speech_rate}")
-
-        # Step 8: Combine all features into a single array
         features = np.hstack([mfcc_mean, mean_pitch, mean_energy, speech_rate])
         print(f"Features combined. Total feature length: {features.shape}")
 

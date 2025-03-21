@@ -5,11 +5,10 @@ import pandas as pd
 # Download the dataset (you already have this step)
 path = kagglehub.dataset_download("ejlok1/toronto-emotional-speech-set-tess")
 
-# Initialize lists to store the paths and labels
+
 paths = []
 labels = []
 
-# Walk through the dataset directory and extract file paths and labels from filenames
 for dirname, _, filenames in os.walk(path):
     for filename in filenames:
         if filename.endswith(".wav"):  # Process only .wav files

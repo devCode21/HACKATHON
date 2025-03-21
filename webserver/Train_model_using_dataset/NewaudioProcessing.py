@@ -4,10 +4,9 @@ import os
 import numpy as np
 import kagglehub
 
-# Download the TESS dataset
+
 path = kagglehub.dataset_download("ejlok1/toronto-emotional-speech-set-tess")
 
-# Lists to store file paths, labels, and features
 paths = []
 labels = []
 pitch_means = []
